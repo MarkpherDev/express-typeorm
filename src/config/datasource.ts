@@ -1,3 +1,4 @@
+import { User } from '../entities/users.entity'
 import { Product } from '../entities/product.entity'
 import { DataSource } from 'typeorm'
 
@@ -8,6 +9,6 @@ export const AppDataSouce = new DataSource({
 	username: 'root',
 	password: '',
 	database: 'puntoventadb',
-	entities: [Product],
+	entities: [Product, User],
 	synchronize: true
 })

@@ -1,6 +1,6 @@
 import express from 'express'
 import cors from 'cors'
-import { config } from 'dotenv'
+import {config} from 'dotenv'
 import { router } from './routes'
 import { AppDataSouce } from './config/datasource'
 import 'reflect-metadata'

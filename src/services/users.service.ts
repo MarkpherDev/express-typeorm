@@ -3,6 +3,7 @@ import { AppDataSouce } from '../config/datasource'
 import { CreateUserDto } from '../dto/users/create-user.dto'
 import { HandleBcrypt } from '../utils/handle-bcrypt'
 import { UpdateUserDto } from '../dto/users/update-user.dto'
+import { RegisterDto } from 'dto/auth/register-user.dto'
 
 export class UserService {
 	private static readonly userRepository = AppDataSouce.getRepository(User)
@@ -17,7 +18,7 @@ export class UserService {
 		lastname,
 		email,
 		password
-	}: CreateUserDto): Promise<User> {
+	}: CreateUserDto | RegisterDto): Promise<User> {
 		const passwordHash = await HandleBcrypt.hashPassword(password)
 		const product = await this.userRepository.save({
 			firstname,

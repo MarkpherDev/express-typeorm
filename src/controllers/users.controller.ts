@@ -31,9 +31,9 @@ export class UserController {
 		}
 	}
 
-	public static async findOne({ params }: Request, res: Response) {
+	public static async findOne({ query }: Request, res: Response) {
 		try {
-			const email = String(params.email)
+			const email = String(query.email)
 			const product = await UserService.findByEmail(email)
 			if (!product) {
 				HandleMessage.error(res, 404, 'User Not Found')

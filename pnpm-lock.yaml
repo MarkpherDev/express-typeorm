@@ -23,6 +23,9 @@ dependencies:
   typeorm:
     specifier: ^0.3.20
     version: 0.3.20(mysql2@3.9.1)(ts-node@10.9.2)
+  uuid:
+    specifier: ^9.0.1
+    version: 9.0.1
 
 devDependencies:
   '@types/bcrypt':
@@ -43,6 +46,9 @@ devDependencies:
   '@types/node':
     specifier: ^20.11.17
     version: 20.11.17
+  '@types/uuid':
+    specifier: ^9.0.8
+    version: 9.0.8
   bcrypt:
     specifier: 5.1.1
     version: 5.1.1
@@ -232,6 +238,10 @@ packages:
       '@types/http-errors': 2.0.4
       '@types/mime': 3.0.4
       '@types/node': 20.11.17
+    dev: true
+
+  /@types/uuid@9.0.8:
+    resolution: {integrity: sha512-jg+97EGIcY9AGHJJRaaPVgetKDsrTgbRjQ5Msgjh/DQKEFl0DtyRr/VCOyD1T2R1MNeWPK/u7JoGhlDZnKBAfA==}
     dev: true
 
   /@types/validator@13.11.9:

@@ -14,4 +14,7 @@ export class UpdateProductDto {
 	@IsDecimal({ decimal_digits: '2' })
 	@IsOptional()
 	price: number
+
+	@IsOptional()
+	image?: string
 }

@@ -11,4 +11,6 @@ export class CreateProductDto {
 
 	@IsDecimal({ decimal_digits: '2' })
 	price: number
+
+	image?: string
 }

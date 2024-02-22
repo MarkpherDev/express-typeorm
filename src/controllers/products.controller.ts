@@ -33,9 +33,9 @@ export class ProductController {
 		}
 	}
 
-	public static async create({ body }: Request, res: Response): Promise<void> {
+	public static async create(req: Request, res: Response): Promise<void> {
 		try {
-			const response = await ProductService.create(body)
+			const response = await ProductService.create(req.body, req.file)
 			HandleMessage.success(
 				res,
 				response,
@@ -49,19 +49,31 @@ export class ProductController {
 
 	public static async update(req: Request, res: Response): Promise<void> {
 		try {
-			const body = req.body
 			const id = Number(req.params.id)
-			const response = await ProductService.update(id, body)
-			if (!response) {
-				HandleMessage.error(res, 404, 'Product Not Found')
+			if (!req.file) {
+				const response = await ProductService.updateWithoutFile(id, req.body)
+				if (!response) {
+					HandleMessage.error(res, 404, 'Product Not Found')
+				} else {
+					HandleMessage.success(
+						res,
+						response,
+						202,
+						'Product Actualizado Correctamente'
+					)
+				}
 			} else {
-				const product = await ProductService.findById(id)
-				HandleMessage.success(
-					res,
-					product,
-					202,
-					'Product Actualizado Correctamente'
-				)
+				const response = await ProductService.update(id, req.body, req.file)
+				if (!response) {
+					HandleMessage.error(res, 404, 'Product Not Found')
+				} else {
+					HandleMessage.success(
+						res,
+						response,
+						202,
+						'Product Actualizado Correctamente'
+					)
+				}
 			}
 		} catch (error) {
 			HandleMessage.error(res)
@@ -86,7 +98,6 @@ export class ProductController {
 				)
 			}
 		} catch (error) {
-			console.log(error)
 			HandleMessage.error(res)
 		}
 	}

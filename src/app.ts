@@ -1,14 +1,14 @@
 import express from 'express'
 import cors from 'cors'
-import {config} from 'dotenv'
+import * as dotenv from 'dotenv'
 import { router } from './routes'
 import { AppDataSouce } from './config/datasource'
 import 'reflect-metadata'
 
-config()
+dotenv.config()
 const app = express()
 
-const PORT = process.env.PORT || 3000
+const PORT: number = Number(process.env.PORT) || 3000
 
 app.use(cors())
 app.use(express.json())

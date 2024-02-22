@@ -20,6 +20,9 @@ export class Product {
 	@Column({ type: 'decimal', precision: 10, scale: 2, nullable: false })
 	price: number
 
+	@Column()
+	image: string
+
 	@CreateDateColumn()
 	createdAt: Date
 

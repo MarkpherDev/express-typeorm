@@ -1,13 +1,20 @@
 import { Product } from '../entities/product.entity'
 import { AppDataSouce } from '../config/datasource'
 import { CreateProductDto } from '../dto/products/create-product.dto'
-import { UpdateProductDto } from 'dto/products/update-product.dto'
+import { UpdateProductDto } from '../dto/products/update-product.dto'
+import * as fs from 'fs/promises'
+import * as path from 'path'
+import { routeProductsImage } from '../common/constants/imageProducts'
 
 export class ProductService {
 	private static readonly productRepository =
 		AppDataSouce.getRepository(Product)
 
-	public static async create(data: CreateProductDto): Promise<Product> {
+	public static async create(
+		data: CreateProductDto,
+		file?: Express.Multer.File
+	): Promise<Product> {
+		data.image = file?.filename
 		const product = this.productRepository.create(data)
 		return await this.productRepository.save(product)
 	}
@@ -19,22 +26,43 @@ export class ProductService {
 
 	public static async findById(id: number): Promise<Product | null> {
 		const productFound = await this.productRepository.findOneBy({ id })
+		if (!productFound) {
+			return null
+		}
 		return productFound
 	}
 
 	public static async update(
 		id: number,
-		data: UpdateProductDto
-	): Promise<boolean> {
-		const product = await this.productRepository.update(id, data)
-		if (product.affected !== 0) {
-			return true
+		data: UpdateProductDto,
+		file: Express.Multer.File
+	): Promise<Product | null> {
+		const productFound = await this.findById(id)
+		if (!productFound) {
+			return null
 		}
-		return false
+		await fs.unlink(
+			path.join(process.cwd(), `${routeProductsImage}${productFound.image}`)
+		)
+		data.image = file.filename
+		await this.productRepository.update(id, data)
+		return await this.findById(id)
 	}
 
-	public static async delete(id: number): Promise<boolean> {
-		const response = await this.productRepository.delete(id)
-		return response.affected !== 0
+	public static async delete(id: number): Promise<Product | null> {
+		const productFound = await this.findById(id)
+		if (!productFound) {
+			return null
+		}
+		await fs.unlink(
+			path.join(process.cwd(), `${routeProductsImage}${productFound.image}`)
+		)
+		await this.productRepository.delete(id)
+		return productFound
+	}
+
+	public static async updateWithoutFile(id: number, data: UpdateProductDto) {
+		await this.productRepository.update(id, data)
+		return await this.findById(id)
 	}
 }
